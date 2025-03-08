@@ -3,21 +3,28 @@ import requests
 from bs4 import BeautifulSoup
 import re
 from urllib.parse import quote
+import os
 
 app = Flask(__name__)
 
-# Load merchants from file in the same directory as app.py
-MERCHANTS_FILE = "merchants.txt"
-with open(MERCHANTS_FILE, 'r', encoding='utf-8') as f:
-    MERCHANTS = [line.strip() for line in f if line.strip()]
+# Load merchants from file in the same directory as app.py using absolute path
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+MERCHANTS_FILE = os.path.join(SCRIPT_DIR, "merchants.txt")
+try:
+    with open(MERCHANTS_FILE, 'r', encoding='utf-8') as f:
+        MERCHANTS = [line.strip() for line in f if line.strip()]
+except FileNotFoundError:
+    print(f"Error: Could not find {MERCHANTS_FILE}. Please ensure merchants.txt exists in {SCRIPT_DIR}")
+    MERCHANTS = []
 
 def get_cashback_percentage(search_term):
     results = []
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
     }
+    # Encode the search term once, ensuring spaces become %20
+    encoded_term = quote(search_term)  # e.g., "Adore Beauty" -> "Adore%20Beauty"
     topcashback_term = re.sub(r'\.com(\.au)?', '', search_term, flags=re.IGNORECASE).lower()
-    encoded_term = quote(search_term)
     encoded_topcashback_term = quote(topcashback_term)
 
     # ShopBack
@@ -64,6 +71,19 @@ def get_cashback_percentage(search_term):
     except Exception as e:
         results.append({"Site": "Cashrewards", "Cashback": f"Error: {str(e)}", "URL": cashrewards_url})
 
+    # Kickback
+    kickback_url = f"https://kickback.com.au/products/search/?q={encoded_term}"
+    try:
+        response = requests.get(kickback_url, headers=headers, timeout=5)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.content, 'html.parser')
+        selector = "div[id='slick-slide00'] div div[class='has-special-font has-text-primary is-uppercase']"
+        element = soup.select_one(selector)
+        cashback = element.text.strip() if element else "No Cashback Available"
+        results.append({"Site": "Kickback", "Cashback": cashback, "URL": kickback_url})
+    except Exception as e:
+        results.append({"Site": "Kickback", "Cashback": f"Error: {str(e)}", "URL": kickback_url})
+
     return results
 
 @app.route('/')
@@ -74,7 +94,7 @@ def index():
 def suggest():
     query = request.args.get('q', '').lower()
     suggestions = [m for m in MERCHANTS if query in m.lower()]
-    return jsonify(suggestions[:10])  # Return top 10 matches
+    return jsonify(suggestions[:10])
 
 @app.route('/search', methods=['POST'])
 def search():
@@ -84,6 +104,5 @@ def search():
         return jsonify(results)
     return jsonify({"error": "Merchant not found"}), 400
 
-# Only run locally for testing
 if __name__ == "__main__":
     app.run(debug=True)
