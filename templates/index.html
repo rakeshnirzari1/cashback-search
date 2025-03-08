@@ -23,11 +23,11 @@
             margin-bottom: 20px;
         }
         .logo-container img {
-            max-width: 100%; /* Ensures responsiveness */
+            max-width: 100%; /* Ensures it doesn’t exceed container */
             height: auto; /* Maintains aspect ratio */
-            width: clamp(150px, 40vw, 300px); /* Scales between 150px and 300px */
-            display: block; /* Removes inline spacing */
-            margin: 0 auto; /* Centers horizontally */
+            width: clamp(150px, 40vw, 300px); /* Default scaling for larger screens */
+            display: block; /* Centers properly */
+            margin: 0 auto; /* Horizontal centering */
         }
         .search-container {
             max-width: 800px;
@@ -118,7 +118,7 @@
             color: white;
         }
 
-        /* Mobile Adjustments */
+        /* Tablet Adjustments */
         @media (max-width: 768px) {
             body {
                 padding: 15px;
@@ -137,10 +137,13 @@
             }
         }
 
-        /* Very Small Screens */
+        /* Mobile Adjustments */
         @media (max-width: 480px) {
             body {
                 padding: 10px;
+            }
+            .logo-container img {
+                width: 100%; /* Full width on mobile */
             }
             .search-container, #resultsTable {
                 width: 100%;
