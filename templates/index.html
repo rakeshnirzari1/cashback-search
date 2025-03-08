@@ -118,8 +118,8 @@
             color: white;
         }
 
-        /* Featured Suppliers and Merchant Index */
-        .featured-suppliers, .merchant-index, .content-section {
+        /* Featured Suppliers / Merchant Index */
+        .supplier-section {
             max-width: 800px;
             width: 90%;
             margin: 30px auto;
@@ -128,24 +128,24 @@
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
-        .featured-suppliers h2, .merchant-index h2, .content-section h2 {
+        .supplier-section h2 {
             color: #2c3e50;
             font-size: 1.5em;
             margin-bottom: 15px;
             text-align: center;
         }
-        .supplier-grid, .merchant-grid {
+        .supplier-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
         }
-        .supplier-grid div, .merchant-grid div {
+        .supplier-grid div {
             padding: 8px;
             font-size: clamp(14px, 3.5vw, 16px);
             cursor: pointer;
             transition: background 0.2s;
         }
-        .supplier-grid div:hover, .merchant-grid div:hover {
+        .supplier-grid div:hover {
             background: #ecf0f1;
         }
         .pagination {
@@ -166,6 +166,23 @@
         .pagination a:hover, .pagination a.active {
             background: #3498db;
             color: white;
+        }
+
+        /* Content Sections */
+        .content-section {
+            max-width: 800px;
+            width: 90%;
+            margin: 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .content-section h2 {
+            color: #2c3e50;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            text-align: center;
         }
         .content-section p, .content-section li {
             font-size: clamp(14px, 3.5vw, 16px);
@@ -190,7 +207,7 @@
             body {
                 padding: 15px;
             }
-            .search-container, #resultsTable, .featured-suppliers, .merchant-index, .content-section {
+            .search-container, #resultsTable, .supplier-section, .content-section {
                 width: 95%;
             }
             #merchantInput {
@@ -202,7 +219,7 @@
             th, td {
                 padding: 10px 12px;
             }
-            .supplier-grid, .merchant-grid {
+            .supplier-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
@@ -215,7 +232,7 @@
             .logo-container img {
                 width: 100%;
             }
-            .search-container, #resultsTable, .featured-suppliers, .merchant-index, .content-section {
+            .search-container, #resultsTable, .supplier-section, .content-section {
                 width: 100%;
             }
             #resultsTable {
@@ -227,7 +244,7 @@
                 padding: 8px 10px;
                 min-width: 100px;
             }
-            .supplier-grid, .merchant-grid {
+            .supplier-grid {
                 grid-template-columns: 1fr;
             }
             .pagination a {
@@ -256,17 +273,10 @@
         <tbody id="resultsBody"></tbody>
     </table>
 
-    <!-- Featured Suppliers -->
-    <section class="featured-suppliers">
-        <h2>Featured Suppliers</h2>
+    <!-- Featured Suppliers / Dynamic Merchant Index -->
+    <section class="supplier-section" id="supplierSection">
+        <h2 id="supplierTitle">Featured Suppliers</h2>
         <div class="supplier-grid" id="supplierGrid"></div>
-        <div class="pagination" id="featuredPagination"></div>
-    </section>
-
-    <!-- Merchant Index -->
-    <section class="merchant-index">
-        <h2>Merchant Index</h2>
-        <div class="merchant-grid" id="merchantGrid"></div>
         <div class="pagination" id="pagination"></div>
     </section>
 
@@ -281,7 +291,7 @@
         <h2>How to Use</h2>
         <ol>
             <li>Type the name of a merchant (e.g., "Adore Beauty" or "Amazon") into the search bar above.</li>
-            <li>Select the merchant from the dropdown suggestions or click one from the index below.</li>
+            <li>Select the merchant from the dropdown suggestions or click one from the list below.</li>
             <li>View the cashback offers in the table—each row shows the site, cashback rate, and a link to visit.</li>
             <li>Click "Go" to proceed with a cashback offer, or "Check" if no cashback is listed to verify manually.</li>
         </ol>
@@ -331,7 +341,7 @@
             const merchantsResponse = await fetch('/merchants');
             const merchants = await merchantsResponse.json();
             const itemsPerPage = 60; // 20 rows * 3 columns
-            let currentLetter = 'A';
+            let currentLetter = null;
 
             // Featured Suppliers
             const featuredSuppliers = [
@@ -344,51 +354,39 @@
                 "Taking Shape", "Florsheim", "YSL Beauty", "Reebok", "Lincraft", "Samsonite", "American Tourister",
                 "Lovehoney", "Princess Highway", "Petal and Pup", "Charles Tyrwhitt", "Glassons", "Coach",
                 "Freely Travel Insurance", "High Sierra", "Binge"
-            ].filter(m => merchants.includes(m)); // Ensure they exist in merchants.txt
+            ].filter(m => merchants.includes(m));
 
-            const supplierGrid = document.getElementById('supplierGrid');
-            featuredSuppliers.forEach(supplier => {
-                const div = document.createElement('div');
-                div.textContent = supplier;
-                div.addEventListener('click', () => {
-                    document.getElementById('merchantInput').value = supplier;
-                    triggerSearch(supplier);
-                });
-                supplierGrid.appendChild(div);
-            });
-
-            // Featured Pagination (links to full index)
-            const featuredPagination = document.getElementById('featuredPagination');
-            'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(ltr => {
-                const a = document.createElement('a');
-                a.textContent = ltr;
-                a.href = '#merchant-index';
-                a.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    currentLetter = ltr;
-                    displayMerchants(ltr);
-                    document.getElementById('merchant-index').scrollIntoView({ behavior: 'smooth' });
-                });
-                featuredPagination.appendChild(a);
-            });
-
-            // Merchant Index
-            function displayMerchants(letter) {
-                const filteredMerchants = merchants.filter(m => m.toUpperCase().startsWith(letter));
-                const grid = document.getElementById('merchantGrid');
+            function displaySuppliers(letter = null) {
+                const grid = document.getElementById('supplierGrid');
+                const title = document.getElementById('supplierTitle');
                 grid.innerHTML = '';
-                const pageMerchants = filteredMerchants.slice(0, itemsPerPage);
 
-                pageMerchants.forEach(merchant => {
-                    const div = document.createElement('div');
-                    div.textContent = merchant;
-                    div.addEventListener('click', () => {
-                        document.getElementById('merchantInput').value = merchant;
-                        triggerSearch(merchant);
-                        document.getElementById('resultsTable').scrollIntoView({ behavior: 'smooth' });
+                if (!letter) {
+                    title.textContent = "Featured Suppliers";
+                    featuredSuppliers.forEach(supplier => {
+                        const div = document.createElement('div');
+                        div.textContent = supplier;
+                        div.addEventListener('click', () => {
+                            document.getElementById('merchantInput').value = supplier;
+                            triggerSearch(supplier);
+                            document.getElementById('resultsTable').scrollIntoView({ behavior: 'smooth' });
+                        });
+                        grid.appendChild(div);
                     });
-                    grid.appendChild(div);
-                });
+                } else {
+                    title.textContent = `Merchants Starting with ${letter}`;
+                    const filteredMerchants = merchants.filter(m => m.toUpperCase().startsWith(letter)).slice(0, itemsPerPage);
+                    filteredMerchants.forEach(merchant => {
+                        const div = document.createElement('div');
+                        div.textContent = merchant;
+                        div.addEventListener('click', () => {
+                            document.getElementById('merchantInput').value = merchant;
+                            triggerSearch(merchant);
+                            document.getElementById('resultsTable').scrollIntoView({ behavior: 'smooth' });
+                        });
+                        grid.appendChild(div);
+                    });
+                }
 
                 const pagination = document.getElementById('pagination');
                 pagination.innerHTML = '';
@@ -400,10 +398,23 @@
                     a.addEventListener('click', (e) => {
                         e.preventDefault();
                         currentLetter = ltr;
-                        displayMerchants(ltr);
+                        displaySuppliers(ltr);
                     });
                     pagination.appendChild(a);
                 });
+                // Add "Back to Featured" link when showing letter-specific merchants
+                if (letter) {
+                    const backLink = document.createElement('a');
+                    backLink.textContent = 'Back to Featured';
+                    backLink.href = '#';
+                    backLink.style.marginLeft = '10px';
+                    backLink.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        currentLetter = null;
+                        displaySuppliers();
+                    });
+                    pagination.appendChild(backLink);
+                }
             }
 
             // Trigger Search Function
@@ -440,8 +451,8 @@
                 });
             }
 
-            // Initial Merchant Display
-            displayMerchants(currentLetter);
+            // Initial Display
+            displaySuppliers();
 
             // Existing Search Functionality
             const merchantInput = document.getElementById('merchantInput');
