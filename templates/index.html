@@ -118,8 +118,8 @@
             color: white;
         }
 
-        /* Merchant Index and Content Sections */
-        .merchant-index, .content-section {
+        /* Featured Suppliers and Merchant Index */
+        .featured-suppliers, .merchant-index, .content-section {
             max-width: 800px;
             width: 90%;
             margin: 30px auto;
@@ -128,24 +128,24 @@
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
-        .merchant-index h2, .content-section h2 {
+        .featured-suppliers h2, .merchant-index h2, .content-section h2 {
             color: #2c3e50;
             font-size: 1.5em;
             margin-bottom: 15px;
             text-align: center;
         }
-        .merchant-grid {
+        .supplier-grid, .merchant-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
         }
-        .merchant-grid div {
+        .supplier-grid div, .merchant-grid div {
             padding: 8px;
             font-size: clamp(14px, 3.5vw, 16px);
             cursor: pointer;
             transition: background 0.2s;
         }
-        .merchant-grid div:hover {
+        .supplier-grid div:hover, .merchant-grid div:hover {
             background: #ecf0f1;
         }
         .pagination {
@@ -190,7 +190,7 @@
             body {
                 padding: 15px;
             }
-            .search-container, #resultsTable, .merchant-index, .content-section {
+            .search-container, #resultsTable, .featured-suppliers, .merchant-index, .content-section {
                 width: 95%;
             }
             #merchantInput {
@@ -202,7 +202,7 @@
             th, td {
                 padding: 10px 12px;
             }
-            .merchant-grid {
+            .supplier-grid, .merchant-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
@@ -215,7 +215,7 @@
             .logo-container img {
                 width: 100%;
             }
-            .search-container, #resultsTable, .merchant-index, .content-section {
+            .search-container, #resultsTable, .featured-suppliers, .merchant-index, .content-section {
                 width: 100%;
             }
             #resultsTable {
@@ -227,7 +227,7 @@
                 padding: 8px 10px;
                 min-width: 100px;
             }
-            .merchant-grid {
+            .supplier-grid, .merchant-grid {
                 grid-template-columns: 1fr;
             }
             .pagination a {
@@ -255,6 +255,13 @@
         </thead>
         <tbody id="resultsBody"></tbody>
     </table>
+
+    <!-- Featured Suppliers -->
+    <section class="featured-suppliers">
+        <h2>Featured Suppliers</h2>
+        <div class="supplier-grid" id="supplierGrid"></div>
+        <div class="pagination" id="featuredPagination"></div>
+    </section>
 
     <!-- Merchant Index -->
     <section class="merchant-index">
@@ -320,25 +327,65 @@
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <script>
-        // Merchant Index and Pagination
         document.addEventListener('DOMContentLoaded', async () => {
             const merchantsResponse = await fetch('/merchants');
             const merchants = await merchantsResponse.json();
             const itemsPerPage = 60; // 20 rows * 3 columns
             let currentLetter = 'A';
 
+            // Featured Suppliers
+            const featuredSuppliers = [
+                "THE ICONIC", "Temu", "AliExpress", "Boost Mobile", "EnergyAustralia", "Bupa", "Lancome", "Napoleon Perdis",
+                "NET-A-PORTER", "Woolworths Online", "Dyson", "Huddle Insurance", "NIB", "Compare the Market", "Wotif",
+                "Flight Centre", "Fitness First", "Target", "adidas", "Hampers With Bite", "H&M", "Adairs", "OZSALE",
+                "Glue Store", "General Pants Co", "Petstock", "Best&Less", "LEGO", "Mytheresa", "New Balance",
+                "Paula's Choice", "Planet Fitness", "Forever New", "The Good Guys Gift Card", "JD Sports", "Mejuri",
+                "Vision Direct", "gorman", "CALVIN KLEIN", "Giorgio Armani Beauty", "Princess Polly", "Camilla",
+                "Taking Shape", "Florsheim", "YSL Beauty", "Reebok", "Lincraft", "Samsonite", "American Tourister",
+                "Lovehoney", "Princess Highway", "Petal and Pup", "Charles Tyrwhitt", "Glassons", "Coach",
+                "Freely Travel Insurance", "High Sierra", "Binge"
+            ].filter(m => merchants.includes(m)); // Ensure they exist in merchants.txt
+
+            const supplierGrid = document.getElementById('supplierGrid');
+            featuredSuppliers.forEach(supplier => {
+                const div = document.createElement('div');
+                div.textContent = supplier;
+                div.addEventListener('click', () => {
+                    document.getElementById('merchantInput').value = supplier;
+                    triggerSearch(supplier);
+                });
+                supplierGrid.appendChild(div);
+            });
+
+            // Featured Pagination (links to full index)
+            const featuredPagination = document.getElementById('featuredPagination');
+            'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(ltr => {
+                const a = document.createElement('a');
+                a.textContent = ltr;
+                a.href = '#merchant-index';
+                a.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    currentLetter = ltr;
+                    displayMerchants(ltr);
+                    document.getElementById('merchant-index').scrollIntoView({ behavior: 'smooth' });
+                });
+                featuredPagination.appendChild(a);
+            });
+
+            // Merchant Index
             function displayMerchants(letter) {
                 const filteredMerchants = merchants.filter(m => m.toUpperCase().startsWith(letter));
                 const grid = document.getElementById('merchantGrid');
                 grid.innerHTML = '';
-                const pageMerchants = filteredMerchants.slice(0, itemsPerPage); // First 60 for simplicity
+                const pageMerchants = filteredMerchants.slice(0, itemsPerPage);
 
                 pageMerchants.forEach(merchant => {
                     const div = document.createElement('div');
                     div.textContent = merchant;
                     div.addEventListener('click', () => {
                         document.getElementById('merchantInput').value = merchant;
-                        triggerSearch(merchant); // Trigger search immediately
+                        triggerSearch(merchant);
+                        document.getElementById('resultsTable').scrollIntoView({ behavior: 'smooth' });
                     });
                     grid.appendChild(div);
                 });
@@ -359,7 +406,7 @@
                 });
             }
 
-            // Trigger search function
+            // Trigger Search Function
             async function triggerSearch(merchant) {
                 const resultsTable = document.getElementById('resultsTable');
                 const resultsBody = document.getElementById('resultsBody');
@@ -393,10 +440,10 @@
                 });
             }
 
-            // Initial merchant display
+            // Initial Merchant Display
             displayMerchants(currentLetter);
 
-            // Existing search functionality
+            // Existing Search Functionality
             const merchantInput = document.getElementById('merchantInput');
             const suggestionsDiv = document.getElementById('suggestions');
 
@@ -415,7 +462,7 @@
                 const merchant = e.target.textContent;
                 merchantInput.value = merchant;
                 suggestionsDiv.innerHTML = '';
-                triggerSearch(merchant); // Use same search function, no scroll
+                triggerSearch(merchant);
             });
         });
     </script>
