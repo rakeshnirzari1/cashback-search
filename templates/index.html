@@ -16,25 +16,39 @@
             background: #f5f7fa;
             color: #333;
             min-height: 100vh;
-            overflow-x: hidden; /* Prevents horizontal scroll on body */
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
         }
-        h1 {
+        .logo-placeholder {
+            width: 200px;
+            height: 80px;
+            background: linear-gradient(135deg, #3498db, #2ecc71);
+            border-radius: 10px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
             text-align: center;
-            color: #2c3e50;
-            margin-bottom: 20px;
-            font-size: clamp(1.8em, 6vw, 2.5em); /* Larger, scales with viewport */
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        .logo-placeholder:hover {
+            transform: scale(1.05);
         }
         .search-container {
-            max-width: 800px; /* Increased for better desktop fit */
-            width: 90%; /* Slightly less than full width for padding */
+            max-width: 800px;
+            width: 90%;
             margin: 0 auto;
             position: relative;
         }
         #merchantInput {
             width: 100%;
             padding: 12px 20px;
-            font-size: clamp(16px, 4vw, 18px); /* Scales text for mobile */
+            font-size: clamp(16px, 4vw, 18px);
             border: 2px solid #dfe6e9;
             border-radius: 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -68,10 +82,10 @@
             background: #ecf0f1;
         }
         #resultsTable {
-            max-width: 800px; /* Matches search-container */
-            width: 90%; /* Matches search-container */
+            max-width: 800px;
+            width: 90%;
             margin: 20px auto;
-            border-collapse: collapse; /* Cleaner look */
+            border-collapse: collapse;
             background: white;
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -91,7 +105,7 @@
         }
         td {
             border-bottom: 1px solid #dfe6e9;
-            word-break: break-word; /* Prevents text overflow */
+            word-break: break-word;
         }
         tr:last-child td {
             border-bottom: none;
@@ -113,14 +127,38 @@
             background: #e74c3c;
             color: white;
         }
+        footer {
+            margin-top: auto;
+            padding: 20px 0;
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            font-size: clamp(12px, 3vw, 14px);
+            border-top: 4px solid #3498db;
+        }
+        footer a {
+            color: #2ecc71;
+            margin: 0 10px;
+            padding: 0;
+            background: none;
+        }
+        footer a:hover {
+            color: #27ae60;
+            background: none;
+        }
 
         /* Mobile Adjustments */
         @media (max-width: 768px) {
             body {
                 padding: 15px;
             }
+            .logo-placeholder {
+                width: 150px;
+                height: 60px;
+                font-size: 20px;
+            }
             .search-container, #resultsTable {
-                width: 95%; /* More screen usage on mobile */
+                width: 95%;
             }
             #merchantInput {
                 padding: 10px 15px;
@@ -138,23 +176,28 @@
             body {
                 padding: 10px;
             }
+            .logo-placeholder {
+                width: 120px;
+                height: 50px;
+                font-size: 18px;
+            }
             .search-container, #resultsTable {
-                width: 100%; /* Full width on tiny screens */
+                width: 100%;
             }
             #resultsTable {
                 display: block;
-                overflow-x: auto; /* Scroll if needed */
-                white-space: normal; /* Allows text wrapping */
+                overflow-x: auto;
+                white-space: normal;
             }
             th, td {
                 padding: 8px 10px;
-                min-width: 100px; /* Ensures columns don’t collapse too small */
+                min-width: 100px;
             }
         }
     </style>
 </head>
 <body>
-    <h1>Cashback Search</h1>
+    <div class="logo-placeholder">Cashback Search</div>
     <div class="search-container">
         <input type="text" id="merchantInput" placeholder="Search for a merchant...">
         <div id="suggestions"></div>
@@ -169,6 +212,10 @@
         </thead>
         <tbody id="resultsBody"></tbody>
     </table>
+    <footer>
+        <p>&copy; 2025 Cashback Search. All rights reserved.</p>
+        <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> | <a href="#">Contact Us</a></p>
+    </footer>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
