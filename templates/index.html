@@ -118,7 +118,7 @@
             color: white;
         }
 
-        /* Featured Suppliers / Merchant Index */
+        /* Featured Suppliers / Dynamic Merchant Index */
         .supplier-section {
             max-width: 800px;
             width: 90%;
@@ -245,7 +245,7 @@
                 min-width: 100px;
             }
             .supplier-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr); /* 2 columns on mobile */
             }
             .pagination a {
                 padding: 6px 10px;
@@ -369,7 +369,7 @@
                         div.addEventListener('click', () => {
                             document.getElementById('merchantInput').value = supplier;
                             triggerSearch(supplier);
-                            document.getElementById('resultsTable').scrollIntoView({ behavior: 'smooth' });
+                            document.getElementById('merchantInput').scrollIntoView({ behavior: 'smooth' });
                         });
                         grid.appendChild(div);
                     });
@@ -382,7 +382,7 @@
                         div.addEventListener('click', () => {
                             document.getElementById('merchantInput').value = merchant;
                             triggerSearch(merchant);
-                            document.getElementById('resultsTable').scrollIntoView({ behavior: 'smooth' });
+                            document.getElementById('merchantInput').scrollIntoView({ behavior: 'smooth' });
                         });
                         grid.appendChild(div);
                     });
@@ -399,10 +399,10 @@
                         e.preventDefault();
                         currentLetter = ltr;
                         displaySuppliers(ltr);
+                        document.getElementById('merchantInput').scrollIntoView({ behavior: 'smooth' });
                     });
                     pagination.appendChild(a);
                 });
-                // Add "Back to Featured" link when showing letter-specific merchants
                 if (letter) {
                     const backLink = document.createElement('a');
                     backLink.textContent = 'Back to Featured';
