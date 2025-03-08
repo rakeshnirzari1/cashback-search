@@ -4,57 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cashback Search</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            padding: 20px;
-            background: #f5f7fa;
-            color: #333;
+            font-family: 'Poppins', sans-serif;
+            background: #f0f4f8;
+            color: #2c3e50;
             min-height: 100vh;
             overflow-x: hidden;
         }
         .logo-container {
+            background: #ffffff;
+            padding: 20px;
             text-align: center;
-            margin-bottom: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
         }
         .logo-container img {
             max-width: 100%;
             height: auto;
             width: clamp(150px, 40vw, 300px);
-            display: block;
-            margin: 0 auto;
         }
         .search-container {
-            max-width: 800px;
-            width: 90%;
-            margin: 0 auto;
-            position: relative;
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
         }
         #merchantInput {
-            width: 100%;
+            font-size: 1.1rem;
+            border-radius: 25px;
             padding: 12px 20px;
-            font-size: clamp(16px, 4vw, 18px);
-            border: 2px solid #dfe6e9;
-            border-radius: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            outline: none;
+            border: 2px solid #3498db;
+            box-shadow: none;
             transition: border-color 0.3s, box-shadow 0.3s;
         }
         #merchantInput:focus {
-            border-color: #3498db;
-            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.2);
+            border-color: #2980b9;
+            box-shadow: 0 0 10px rgba(41, 128, 185, 0.3);
         }
         #suggestions {
             position: absolute;
             top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
+            left: 15px;
+            right: 15px;
+            background: #fff;
             border: 1px solid #dfe6e9;
             border-radius: 10px;
             max-height: 250px;
@@ -65,102 +62,80 @@
         #suggestions div {
             padding: 10px 15px;
             cursor: pointer;
-            font-size: clamp(14px, 3.5vw, 16px);
             transition: background 0.2s;
         }
         #suggestions div:hover {
             background: #ecf0f1;
         }
         #resultsTable {
-            max-width: 800px;
-            width: 90%;
-            margin: 20px auto;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 10px;
+            background: #fff;
+            border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
+            margin-bottom: 30px;
         }
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            font-size: clamp(14px, 3.5vw, 16px);
-        }
-        th {
+        #resultsTable th {
             background: #3498db;
             color: white;
-            font-weight: 600;
             text-transform: uppercase;
-            font-size: clamp(12px, 3vw, 14px);
         }
-        td {
+        #resultsTable td {
             border-bottom: 1px solid #dfe6e9;
-            word-break: break-word;
         }
-        tr:last-child td {
+        #resultsTable tr:last-child td {
             border-bottom: none;
         }
-        tr:nth-child(even) {
+        #resultsTable tr:nth-child(even) {
             background: #f9fafb;
         }
-        a {
+        #resultsTable a {
             color: #e74c3c;
-            text-decoration: none;
             font-weight: 500;
             padding: 5px 10px;
             border-radius: 12px;
             transition: background 0.3s, color 0.3s;
-            display: inline-block;
-            font-size: clamp(12px, 3vw, 14px);
         }
-        a:hover {
+        #resultsTable a:hover {
             background: #e74c3c;
             color: white;
         }
 
-        /* Featured Suppliers / Dynamic Merchant Index */
+        /* Supplier Section */
         .supplier-section {
-            max-width: 800px;
-            width: 90%;
-            margin: 30px auto;
-            background: white;
+            background: #fef9e7;
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
         }
         .supplier-section h2 {
-            color: #2c3e50;
-            font-size: 1.5em;
-            margin-bottom: 15px;
-            text-align: center;
+            color: #f39c12;
+            font-size: 1.75rem;
+            margin-bottom: 20px;
         }
         .supplier-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            gap: 15px;
         }
         .supplier-grid div {
-            padding: 8px;
-            font-size: clamp(14px, 3.5vw, 16px);
+            padding: 10px;
+            background: #fff;
+            border-radius: 10px;
+            text-align: center;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: background 0.2s, transform 0.2s;
         }
         .supplier-grid div:hover {
             background: #ecf0f1;
-        }
-        .pagination {
-            text-align: center;
-            margin-top: 20px;
+            transform: translateY(-2px);
         }
         .pagination a {
-            display: inline-block;
             margin: 0 5px;
             padding: 8px 12px;
             background: #dfe6e9;
             color: #333;
             border-radius: 50%;
             text-decoration: none;
-            font-size: 14px;
             transition: background 0.3s, color 0.3s;
         }
         .pagination a:hover, .pagination a.active {
@@ -170,55 +145,31 @@
 
         /* Content Sections */
         .content-section {
-            max-width: 800px;
-            width: 90%;
-            margin: 30px auto;
-            background: white;
+            background: #ffffff;
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        .content-section:nth-child(odd) {
+            background: #f4ecf7;
         }
         .content-section h2 {
-            color: #2c3e50;
-            font-size: 1.5em;
-            margin-bottom: 15px;
-            text-align: center;
+            color: #8e44ad;
+            font-size: 1.75rem;
+            margin-bottom: 20px;
         }
         .content-section p, .content-section li {
-            font-size: clamp(14px, 3.5vw, 16px);
+            font-size: 1rem;
             line-height: 1.6;
-            margin-bottom: 10px;
-        }
-        .content-section ul, .content-section ol {
-            padding-left: 20px;
-        }
-        .content-section details {
-            margin-bottom: 15px;
         }
         .content-section summary {
-            cursor: pointer;
-            font-weight: 600;
-            font-size: clamp(14px, 3.5vw, 16px);
             color: #3498db;
+            font-weight: 600;
         }
 
         /* Tablet Adjustments */
         @media (max-width: 768px) {
-            body {
-                padding: 15px;
-            }
-            .search-container, #resultsTable, .supplier-section, .content-section {
-                width: 95%;
-            }
-            #merchantInput {
-                padding: 10px 15px;
-            }
-            #suggestions div {
-                padding: 8px 12px;
-            }
-            th, td {
-                padding: 10px 12px;
-            }
             .supplier-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -226,115 +177,102 @@
 
         /* Mobile Adjustments */
         @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-            .logo-container img {
-                width: 100%;
-            }
-            .search-container, #resultsTable, .supplier-section, .content-section {
-                width: 100%;
-            }
-            #resultsTable {
-                display: block;
-                overflow-x: auto;
-                white-space: normal;
-            }
-            th, td {
-                padding: 8px 10px;
-                min-width: 100px;
-            }
             .supplier-grid {
-                grid-template-columns: repeat(2, 1fr); /* 2 columns on mobile */
+                grid-template-columns: repeat(2, 1fr);
             }
             .pagination a {
                 padding: 6px 10px;
-                font-size: 12px;
             }
         }
     </style>
+    <!-- Google Fonts for Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="logo-container">
-        <img src="{{ url_for('static', filename='logo.png') }}" alt="Cashback Search Logo">
+    <div class="container">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Cashback Search Logo">
+        </div>
+        <div class="search-container">
+            <input type="text" id="merchantInput" class="form-control" placeholder="Search for a merchant...">
+            <div id="suggestions"></div>
+        </div>
+        <table id="resultsTable" class="table table-hover" style="display: none;">
+            <thead>
+                <tr>
+                    <th>Site</th>
+                    <th>Cashback</th>
+                    <th>URL</th>
+                </tr>
+            </thead>
+            <tbody id="resultsBody"></tbody>
+        </table>
+
+        <!-- Featured Suppliers / Dynamic Merchant Index -->
+        <section class="supplier-section" id="supplierSection">
+            <h2 id="supplierTitle">Featured Suppliers</h2>
+            <div class="supplier-grid" id="supplierGrid"></div>
+            <div class="pagination" id="pagination"></div>
+        </section>
+
+        <!-- About This Tool -->
+        <section class="content-section">
+            <h2>About This Tool</h2>
+            <p>Cashback Search is a free, easy-to-use tool designed to help you find the best cashback offers from three leading Australian cashback platforms: ShopBack, TopCashback, and Cashrewards. Whether you're shopping for clothes, travel, or tech, simply enter a merchant name to see available cashback rates and links to check them out—all in one place!</p>
+        </section>
+
+        <!-- How to Use -->
+        <section class="content-section">
+            <h2>How to Use</h2>
+            <ol>
+                <li>Type the name of a merchant (e.g., "Adore Beauty" or "Amazon") into the search bar above.</li>
+                <li>Select the merchant from the dropdown suggestions or click one from the list below.</li>
+                <li>View the cashback offers in the table—each row shows the site, cashback rate, and a link to visit.</li>
+                <li>Click "Go" to proceed with a cashback offer, or "Check" if no cashback is listed to verify manually.</li>
+            </ol>
+        </section>
+
+        <!-- Disclaimer -->
+        <section class="content-section">
+            <h2>Disclaimer</h2>
+            <p>This tool provides cashback information based on web scraping and is for informational purposes only. While we strive for accuracy, offers may change, and errors can occur. <strong>Always verify the cashback offer directly on the cashback site before making a purchase</strong>, especially if the merchant name seems incorrect or no cashback is shown. We are not responsible for inaccuracies, outdated information, or any financial loss resulting from reliance on this tool.</p>
+        </section>
+
+        <!-- FAQ -->
+        <section class="content-section">
+            <h2>Frequently Asked Questions (FAQ)</h2>
+            <details>
+                <summary>What is cashback?</summary>
+                <p>Cashback is a reward offered by certain websites where you get a percentage of your purchase amount back after shopping through their links.</p>
+            </details>
+            <details>
+                <summary>Why does it say "No Cashback Available"?</summary>
+                <p>This means our tool couldn’t find a cashback offer for that merchant on the site at the time of the search. Click "Check" to visit the site and confirm manually.</p>
+            </details>
+            <details>
+                <summary>Are all merchants covered?</summary>
+                <p>We search a curated list of merchants from our database. If a merchant isn’t listed, try a similar name or check the cashback sites directly.</p>
+            </details>
+            <details>
+                <summary>Is this tool affiliated with the cashback sites?</summary>
+                <p>No, we’re an independent tool designed to help users compare offers. We don’t earn commissions or have partnerships with these sites.</p>
+            </details>
+        </section>
+
+        <!-- About Cashback Sites -->
+        <section class="content-section">
+            <h2>About the Cashback Sites</h2>
+            <h3>ShopBack</h3>
+            <p>Founded in 2014 in Singapore, ShopBack has grown into one of Asia-Pacific’s leading cashback platforms, expanding to Australia and beyond. It partners with thousands of retailers, offering cashback on everything from fashion to travel, with a mission to make shopping more rewarding.</p>
+            <h3>TopCashback</h3>
+            <p>Launched in 2005 in the UK, TopCashback is one of the world’s largest cashback sites, entering the Australian market later. Known for passing 100% of commissions to users, it’s a favorite for maximizing savings across a wide range of stores.</p>
+            <h3>Cashrewards</h3>
+            <p>Started in 2014 in Australia, Cashrewards is a homegrown cashback platform that’s become a go-to for Aussie shoppers. With partnerships across major retailers, it’s known for competitive rates and a user-friendly experience.</p>
+        </section>
     </div>
-    <div class="search-container">
-        <input type="text" id="merchantInput" placeholder="Search for a merchant...">
-        <div id="suggestions"></div>
-    </div>
-    <table id="resultsTable" style="display: none;">
-        <thead>
-            <tr>
-                <th>Site</th>
-                <th>Cashback</th>
-                <th>URL</th>
-            </tr>
-        </thead>
-        <tbody id="resultsBody"></tbody>
-    </table>
 
-    <!-- Featured Suppliers / Dynamic Merchant Index -->
-    <section class="supplier-section" id="supplierSection">
-        <h2 id="supplierTitle">Featured Suppliers</h2>
-        <div class="supplier-grid" id="supplierGrid"></div>
-        <div class="pagination" id="pagination"></div>
-    </section>
-
-    <!-- About This Tool -->
-    <section class="content-section">
-        <h2>About This Tool</h2>
-        <p>Cashback Search is a free, easy-to-use tool designed to help you find the best cashback offers from three leading Australian cashback platforms: ShopBack, TopCashback, and Cashrewards. Whether you're shopping for clothes, travel, or tech, simply enter a merchant name to see available cashback rates and links to check them out—all in one place!</p>
-    </section>
-
-    <!-- How to Use -->
-    <section class="content-section">
-        <h2>How to Use</h2>
-        <ol>
-            <li>Type the name of a merchant (e.g., "Adore Beauty" or "Amazon") into the search bar above.</li>
-            <li>Select the merchant from the dropdown suggestions or click one from the list below.</li>
-            <li>View the cashback offers in the table—each row shows the site, cashback rate, and a link to visit.</li>
-            <li>Click "Go" to proceed with a cashback offer, or "Check" if no cashback is listed to verify manually.</li>
-        </ol>
-    </section>
-
-    <!-- Disclaimer -->
-    <section class="content-section">
-        <h2>Disclaimer</h2>
-        <p>This tool provides cashback information based on web scraping and is for informational purposes only. While we strive for accuracy, offers may change, and errors can occur. <strong>Always verify the cashback offer directly on the cashback site before making a purchase</strong>, especially if the merchant name seems incorrect or no cashback is shown. We are not responsible for inaccuracies, outdated information, or any financial loss resulting from reliance on this tool.</p>
-    </section>
-
-    <!-- FAQ -->
-    <section class="content-section">
-        <h2>Frequently Asked Questions (FAQ)</h2>
-        <details>
-            <summary>What is cashback?</summary>
-            <p>Cashback is a reward offered by certain websites where you get a percentage of your purchase amount back after shopping through their links.</p>
-        </details>
-        <details>
-            <summary>Why does it say "No Cashback Available"?</summary>
-            <p>This means our tool couldn’t find a cashback offer for that merchant on the site at the time of the search. Click "Check" to visit the site and confirm manually.</p>
-        </details>
-        <details>
-            <summary>Are all merchants covered?</summary>
-            <p>We search a curated list of merchants from our database. If a merchant isn’t listed, try a similar name or check the cashback sites directly.</p>
-        </details>
-        <details>
-            <summary>Is this tool affiliated with the cashback sites?</summary>
-            <p>No, we’re an independent tool designed to help users compare offers. We don’t earn commissions or have partnerships with these sites.</p>
-        </details>
-    </section>
-
-    <!-- About Cashback Sites -->
-    <section class="content-section">
-        <h2>About the Cashback Sites</h2>
-        <h3>ShopBack</h3>
-        <p>Founded in 2014 in Singapore, ShopBack has grown into one of Asia-Pacific’s leading cashback platforms, expanding to Australia and beyond. It partners with thousands of retailers, offering cashback on everything from fashion to travel, with a mission to make shopping more rewarding.</p>
-        <h3>TopCashback</h3>
-        <p>Launched in 2005 in the UK, TopCashback is one of the world’s largest cashback sites, entering the Australian market later. Known for passing 100% of commissions to users, it’s a favorite for maximizing savings across a wide range of stores.</p>
-        <h3>Cashrewards</h3>
-        <p>Started in 2014 in Australia, Cashrewards is a homegrown cashback platform that’s become a go-to for Aussie shoppers. With partnerships across major retailers, it’s known for competitive rates and a user-friendly experience.</p>
-    </section>
-
+    <!-- Bootstrap JS (for table hover, etc.) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
@@ -417,7 +355,6 @@
                 }
             }
 
-            // Trigger Search Function
             async function triggerSearch(merchant) {
                 const resultsTable = document.getElementById('resultsTable');
                 const resultsBody = document.getElementById('resultsBody');
@@ -451,10 +388,8 @@
                 });
             }
 
-            // Initial Display
             displaySuppliers();
 
-            // Existing Search Functionality
             const merchantInput = document.getElementById('merchantInput');
             const suggestionsDiv = document.getElementById('suggestions');
 
