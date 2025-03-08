@@ -118,8 +118,8 @@
             color: white;
         }
 
-        /* Content Sections */
-        .content-section {
+        /* Merchant Index */
+        .merchant-index {
             max-width: 800px;
             width: 90%;
             margin: 30px auto;
@@ -128,27 +128,44 @@
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
-        .content-section h2 {
+        .merchant-index h2 {
             color: #2c3e50;
             font-size: 1.5em;
             margin-bottom: 15px;
+            text-align: center;
         }
-        .content-section p, .content-section li {
+        .merchant-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        .merchant-grid div {
+            padding: 8px;
             font-size: clamp(14px, 3.5vw, 16px);
-            line-height: 1.6;
-            margin-bottom: 10px;
-        }
-        .content-section ul, .content-section ol {
-            padding-left: 20px;
-        }
-        .content-section details {
-            margin-bottom: 15px;
-        }
-        .content-section summary {
             cursor: pointer;
-            font-weight: 600;
-            font-size: clamp(14px, 3.5vw, 16px);
-            color: #3498db;
+            transition: background 0.2s;
+        }
+        .merchant-grid div:hover {
+            background: #ecf0f1;
+        }
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .pagination a {
+            display: inline-block;
+            margin: 0 5px;
+            padding: 8px 12px;
+            background: #dfe6e9;
+            color: #333;
+            border-radius: 50%;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.3s, color 0.3s;
+        }
+        .pagination a:hover, .pagination a.active {
+            background: #3498db;
+            color: white;
         }
 
         /* Tablet Adjustments */
@@ -156,7 +173,7 @@
             body {
                 padding: 15px;
             }
-            .search-container, #resultsTable, .content-section {
+            .search-container, #resultsTable, .merchant-index {
                 width: 95%;
             }
             #merchantInput {
@@ -168,6 +185,9 @@
             th, td {
                 padding: 10px 12px;
             }
+            .merchant-grid {
+                grid-template-columns: repeat(2, 1fr); /* 2 columns on tablet */
+            }
         }
 
         /* Mobile Adjustments */
@@ -178,7 +198,7 @@
             .logo-container img {
                 width: 100%;
             }
-            .search-container, #resultsTable, .content-section {
+            .search-container, #resultsTable, .merchant-index {
                 width: 100%;
             }
             #resultsTable {
@@ -190,11 +210,12 @@
                 padding: 8px 10px;
                 min-width: 100px;
             }
-            .content-section {
-                padding: 15px;
+            .merchant-grid {
+                grid-template-columns: 1fr; /* 1 column on mobile */
             }
-            .content-section h2 {
-                font-size: 1.3em;
+            .pagination a {
+                padding: 6px 10px;
+                font-size: 12px;
             }
         }
     </style>
@@ -218,61 +239,74 @@
         <tbody id="resultsBody"></tbody>
     </table>
 
-    <!-- About This Tool -->
-    <section class="content-section">
-        <h2>About This Tool</h2>
-        <p>Cashback Search is a free, easy-to-use tool designed to help you find the best cashback offers from four leading Australian cashback platforms: ShopBack, TopCashback and Cashrewards. Whether you're shopping for clothes, travel, or tech, simply enter a merchant name to see available cashback rates and links to check them out—all in one place!</p>
+    <section class="merchant-index">
+        <h2>Merchant Index</h2>
+        <div class="merchant-grid" id="merchantGrid"></div>
+        <div class="pagination" id="pagination"></div>
     </section>
-
-    <!-- How to Use -->
-    <section class="content-section">
-        <h2>How to Use</h2>
-        <ol>
-            <li>Type the name of a merchant (e.g., "Adore Beauty" or "Viator") into the search bar above.</li>
-            <li>Select the merchant from the dropdown suggestions that appear.</li>
-            <li>View the cashback offers in the table—each row shows the site, cashback rate, and a link to visit.</li>
-            <li>Click "Go" to proceed with a cashback offer, or "Check" if no cashback is listed to verify manually.</li>
-        </ol>
-    </section>
-
-    <!-- Disclaimer -->
-    <section class="content-section">
-        <h2>Disclaimer</h2>
-        <p>This tool provides cashback information based on web scraping and is for informational purposes only. While we strive for accuracy, offers may change, and errors can occur. <strong>Always verify the cashback offer directly on the cashback site before making a purchase</strong>, especially if the merchant name seems incorrect or no cashback is shown. We are not responsible for inaccuracies, outdated information, or any financial loss resulting from reliance on this tool.</p>
-    </section>
-
-    <!-- FAQ -->
-    <section class="content-section">
-        <h2>Frequently Asked Questions (FAQ)</h2>
-        <details>
-            <summary>What is cashback?</summary>
-            <p>Cashback is a reward offered by certain websites where you get a percentage of your purchase amount back after shopping through their links.</p>
-        </details>
-        <details>
-            <summary>Why does it say "No Cashback Available"?</summary>
-            <p>This means our tool couldn’t find a cashback offer for that merchant on the site at the time of the search. Click "Check" to visit the site and confirm manually.</p>
-        </details>
-        <details>
-            <summary>Are all merchants covered?</summary>
-            <p>We search a curated list of merchants from our database. If a merchant isn’t listed, try a similar name or check the cashback sites directly.</p>
-        </details>
-        <details>
-            <summary>Is this tool affiliated with the cashback sites?</summary>
-            <p>No, we’re an independent tool designed to help users compare offers. We don’t earn commissions or have partnerships with these sites.</p>
-        </details>
-    </section>
-
-    <!-- About Cashback Sites -->
-    <section class="content-section">
-        <h2>About the Cashback Sites</h2>
-        <h3>ShopBack</h3>
-        <p>Founded in 2014 in Singapore, ShopBack has grown into one of Asia-Pacific’s leading cashback platforms, expanding to Australia and beyond. It partners with thousands of retailers, offering cashback on everything from fashion to travel, with a mission to make shopping more rewarding.</p>
-        <h3>TopCashback</h3>
-        <p>Launched in 2005 in the UK, TopCashback is one of the world’s largest cashback sites, entering the Australian market later. Known for passing 100% of commissions to users, it’s a favorite for maximizing savings across a wide range of stores.</p>
-        <h3>Cashrewards</h3>
-        <p>Started in 2014 in Australia, Cashrewards is a homegrown cashback platform that’s become a go-to for Aussie shoppers. With partnerships across major retailers, it’s known for competitive rates and a user-friendly experience.</p>
-        </section>
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        // Merchant Index and Pagination
+        document.addEventListener('DOMContentLoaded', async () => {
+            const merchantsResponse = await fetch('/merchants');
+            const merchants = await merchantsResponse.json();
+            const itemsPerPage = 60; // 20 rows * 3 columns
+            let currentLetter = 'A';
+
+            function displayMerchants(letter) {
+                const filteredMerchants = merchants.filter(m => m.toUpperCase().startsWith(letter));
+                const totalPages = Math.ceil(filteredMerchants.length / itemsPerPage);
+                let page = 1;
+
+                function renderPage(pageNum) {
+                    const start = (pageNum - 1) * itemsPerPage;
+                    const end = start + itemsPerPage;
+                    const pageMerchants = filteredMerchants.slice(start, end);
+
+                    const grid = document.getElementById('merchantGrid');
+                    grid.innerHTML = '';
+                    pageMerchants.forEach(merchant => {
+                        const div = document.createElement('div');
+                        div.textContent = merchant;
+                        div.addEventListener('click', () => {
+                            document.getElementById('merchantInput').value = merchant;
+                            suggestionsDiv.innerHTML = '';
+                            document.querySelector('#suggestions div')?.click(); // Trigger search
+                        });
+                        grid.appendChild(div);
+                    });
+
+                    // Update pagination (simple for single page per letter)
+                    const pagination = document.getElementById('pagination');
+                    pagination.innerHTML = '';
+                    'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(ltr => {
+                        const a = document.createElement('a');
+                        a.textContent = ltr;
+                        a.href = '#';
+                        if (ltr === letter) a.classList.add('active');
+                        a.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            currentLetter = ltr;
+                            displayMerchants(ltr);
+                        });
+                        pagination.appendChild(a);
+                    });
+                }
+
+                renderPage(page);
+            }
+
+            // Initial display
+            displayMerchants(currentLetter);
+
+            // Tie into existing search functionality
+            const suggestionsDiv = document.getElementById('suggestions');
+            suggestionsDiv.addEventListener('click', () => {
+                const grid = document.getElementById('merchantGrid');
+                grid.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
 </body>
 </html>
