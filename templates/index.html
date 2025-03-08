@@ -23,11 +23,11 @@
             margin-bottom: 20px;
         }
         .logo-container img {
-            max-width: 100%; /* Ensures it doesn’t exceed container */
-            height: auto; /* Maintains aspect ratio */
-            width: clamp(150px, 40vw, 300px); /* Default scaling for larger screens */
-            display: block; /* Centers properly */
-            margin: 0 auto; /* Horizontal centering */
+            max-width: 100%;
+            height: auto;
+            width: clamp(150px, 40vw, 300px);
+            display: block;
+            margin: 0 auto;
         }
         .search-container {
             max-width: 800px;
@@ -118,12 +118,45 @@
             color: white;
         }
 
+        /* Content Sections */
+        .content-section {
+            max-width: 800px;
+            width: 90%;
+            margin: 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .content-section h2 {
+            color: #2c3e50;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+        .content-section p, .content-section li {
+            font-size: clamp(14px, 3.5vw, 16px);
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        .content-section ul, .content-section ol {
+            padding-left: 20px;
+        }
+        .content-section details {
+            margin-bottom: 15px;
+        }
+        .content-section summary {
+            cursor: pointer;
+            font-weight: 600;
+            font-size: clamp(14px, 3.5vw, 16px);
+            color: #3498db;
+        }
+
         /* Tablet Adjustments */
         @media (max-width: 768px) {
             body {
                 padding: 15px;
             }
-            .search-container, #resultsTable {
+            .search-container, #resultsTable, .content-section {
                 width: 95%;
             }
             #merchantInput {
@@ -143,9 +176,9 @@
                 padding: 10px;
             }
             .logo-container img {
-                width: 100%; /* Full width on mobile */
+                width: 100%;
             }
-            .search-container, #resultsTable {
+            .search-container, #resultsTable, .content-section {
                 width: 100%;
             }
             #resultsTable {
@@ -156,6 +189,12 @@
             th, td {
                 padding: 8px 10px;
                 min-width: 100px;
+            }
+            .content-section {
+                padding: 15px;
+            }
+            .content-section h2 {
+                font-size: 1.3em;
             }
         }
     </style>
@@ -178,6 +217,62 @@
         </thead>
         <tbody id="resultsBody"></tbody>
     </table>
+
+    <!-- About This Tool -->
+    <section class="content-section">
+        <h2>About This Tool</h2>
+        <p>Cashback Search is a free, easy-to-use tool designed to help you find the best cashback offers from four leading Australian cashback platforms: ShopBack, TopCashback, Cashrewards, and Kickback. Whether you're shopping for clothes, travel, or tech, simply enter a merchant name to see available cashback rates and links to check them out—all in one place!</p>
+    </section>
+
+    <!-- How to Use -->
+    <section class="content-section">
+        <h2>How to Use</h2>
+        <ol>
+            <li>Type the name of a merchant (e.g., "Adore Beauty" or "Viator") into the search bar above.</li>
+            <li>Select the merchant from the dropdown suggestions that appear.</li>
+            <li>View the cashback offers in the table—each row shows the site, cashback rate, and a link to visit.</li>
+            <li>Click "Go" to proceed with a cashback offer, or "Check" if no cashback is listed to verify manually.</li>
+        </ol>
+    </section>
+
+    <!-- Disclaimer -->
+    <section class="content-section">
+        <h2>Disclaimer</h2>
+        <p>This tool provides cashback information based on web scraping and is for informational purposes only. While we strive for accuracy, offers may change, and errors can occur. <strong>Always verify the cashback offer directly on the cashback site before making a purchase</strong>, especially if the merchant name seems incorrect or no cashback is shown. We are not responsible for inaccuracies, outdated information, or any financial loss resulting from reliance on this tool.</p>
+    </section>
+
+    <!-- FAQ -->
+    <section class="content-section">
+        <h2>Frequently Asked Questions (FAQ)</h2>
+        <details>
+            <summary>What is cashback?</summary>
+            <p>Cashback is a reward offered by certain websites where you get a percentage of your purchase amount back after shopping through their links.</p>
+        </details>
+        <details>
+            <summary>Why does it say "No Cashback Available"?</summary>
+            <p>This means our tool couldn’t find a cashback offer for that merchant on the site at the time of the search. Click "Check" to visit the site and confirm manually.</p>
+        </details>
+        <details>
+            <summary>Are all merchants covered?</summary>
+            <p>We search a curated list of merchants from our database. If a merchant isn’t listed, try a similar name or check the cashback sites directly.</p>
+        </details>
+        <details>
+            <summary>Is this tool affiliated with the cashback sites?</summary>
+            <p>No, we’re an independent tool designed to help users compare offers. We don’t earn commissions or have partnerships with these sites.</p>
+        </details>
+    </section>
+
+    <!-- About Cashback Sites -->
+    <section class="content-section">
+        <h2>About the Cashback Sites</h2>
+        <h3>ShopBack</h3>
+        <p>Founded in 2014 in Singapore, ShopBack has grown into one of Asia-Pacific’s leading cashback platforms, expanding to Australia and beyond. It partners with thousands of retailers, offering cashback on everything from fashion to travel, with a mission to make shopping more rewarding.</p>
+        <h3>TopCashback</h3>
+        <p>Launched in 2005 in the UK, TopCashback is one of the world’s largest cashback sites, entering the Australian market later. Known for passing 100% of commissions to users, it’s a favorite for maximizing savings across a wide range of stores.</p>
+        <h3>Cashrewards</h3>
+        <p>Started in 2014 in Australia, Cashrewards is a homegrown cashback platform that’s become a go-to for Aussie shoppers. With partnerships across major retailers, it’s known for competitive rates and a user-friendly experience.</p>
+        </section>
+
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
