@@ -45,7 +45,7 @@
         #merchantInput {
             font-size: 1.1rem;
             border-radius: 25px;
-            padding: 12px 40px 12px 20px; /* Extra padding-right for clear button */
+            padding: 12px 40px 12px 20px;
             border: 2px solid #3498db;
             box-shadow: none;
             transition: border-color 0.3s, box-shadow 0.3s;
@@ -70,7 +70,7 @@
             line-height: 24px;
             text-align: center;
             cursor: pointer;
-            display: none; /* Hidden by default */
+            display: none;
             transition: background 0.3s;
         }
         #clearSearch:hover {
@@ -161,8 +161,14 @@
             background: #ecf0f1;
             transform: translateY(-2px);
         }
+        .pagination {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 5px;
+        }
         .pagination a {
-            margin: 0 5px;
+            margin: 0;
             padding: 8px 12px;
             background: #dfe6e9;
             color: #333;
@@ -317,9 +323,12 @@
                 "Freely Travel Insurance", "High Sierra", "Binge"
             ].filter(m => merchants.includes(m));
 
+            const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
             function displaySuppliers(letter = null) {
                 const grid = document.getElementById('supplierGrid');
                 const title = document.getElementById('supplierTitle');
+                const clearSearchBtn = document.getElementById('clearSearch');
                 grid.innerHTML = '';
 
                 if (!letter) {
@@ -329,6 +338,7 @@
                         div.textContent = supplier;
                         div.addEventListener('click', () => {
                             document.getElementById('merchantInput').value = supplier;
+                            clearSearchBtn.style.display = 'block'; // Show clear button
                             triggerSearch(supplier);
                             document.getElementById('merchantInput').scrollIntoView({ behavior: 'smooth' });
                         });
@@ -342,6 +352,7 @@
                         div.textContent = merchant;
                         div.addEventListener('click', () => {
                             document.getElementById('merchantInput').value = merchant;
+                            clearSearchBtn.style.display = 'block'; // Show clear button
                             triggerSearch(merchant);
                             document.getElementById('merchantInput').scrollIntoView({ behavior: 'smooth' });
                         });
@@ -351,7 +362,12 @@
 
                 const pagination = document.getElementById('pagination');
                 pagination.innerHTML = '';
-                'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(ltr => {
+
+                // Simplified pagination: A, B, C, Prev, Next, Z
+                const currentIndex = letter ? alphabet.indexOf(letter) : -1;
+
+                // A, B, C
+                ['A', 'B', 'C'].forEach(ltr => {
                     const a = document.createElement('a');
                     a.textContent = ltr;
                     a.href = '#';
@@ -364,9 +380,52 @@
                     });
                     pagination.appendChild(a);
                 });
+
+                // Previous
+                if (currentIndex > 0) {
+                    const prev = document.createElement('a');
+                    prev.textContent = '←';
+                    prev.href = '#';
+                    prev.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        currentLetter = alphabet[currentIndex - 1];
+                        displaySuppliers(currentLetter);
+                        document.getElementById('merchantInput').scrollIntoView({ behavior: 'smooth' });
+                    });
+                    pagination.appendChild(prev);
+                }
+
+                // Next
+                if (currentIndex < alphabet.length - 1 && currentIndex !== -1) {
+                    const next = document.createElement('a');
+                    next.textContent = '→';
+                    next.href = '#';
+                    next.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        currentLetter = alphabet[currentIndex + 1];
+                        displaySuppliers(currentLetter);
+                        document.getElementById('merchantInput').scrollIntoView({ behavior: 'smooth' });
+                    });
+                    pagination.appendChild(next);
+                }
+
+                // Z
+                const z = document.createElement('a');
+                z.textContent = 'Z';
+                z.href = '#';
+                if ('Z' === letter) z.classList.add('active');
+                z.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    currentLetter = 'Z';
+                    displaySuppliers('Z');
+                    document.getElementById('merchantInput').scrollIntoView({ behavior: 'smooth' });
+                });
+                pagination.appendChild(z);
+
+                // Back to Featured (if on a letter)
                 if (letter) {
                     const backLink = document.createElement('a');
-                    backLink.textContent = 'Back to Featured';
+                    backLink.textContent = 'Featured';
                     backLink.href = '#';
                     backLink.style.marginLeft = '10px';
                     backLink.addEventListener('click', (e) => {
@@ -425,7 +484,7 @@
             merchantInput.addEventListener('input', async () => {
                 const query = merchantInput.value.trim();
                 suggestionsDiv.innerHTML = '';
-                clearSearchBtn.style.display = query.length > 0 ? 'block' : 'none'; // Show/hide X button
+                clearSearchBtn.style.display = query.length > 0 ? 'block' : 'none';
 
                 if (query.length < 2) return;
 
@@ -443,7 +502,7 @@
                 const merchant = e.target.textContent;
                 merchantInput.value = merchant;
                 suggestionsDiv.innerHTML = '';
-                clearSearchBtn.style.display = 'block'; // Keep X visible after selection
+                clearSearchBtn.style.display = 'block';
                 triggerSearch(merchant);
             });
 
@@ -451,7 +510,7 @@
                 merchantInput.value = '';
                 suggestionsDiv.innerHTML = '';
                 clearSearchBtn.style.display = 'none';
-                document.getElementById('resultsTable').style.display = 'none'; // Optional: hide results
+                document.getElementById('resultsTable').style.display = 'none';
             });
         });
     </script>
