@@ -166,8 +166,9 @@
             flex-wrap: wrap;
             justify-content: center;
             gap: 5px;
+            align-items: center;
         }
-        .pagination a {
+        .pagination a, .pagination select {
             margin: 0;
             padding: 8px 12px;
             background: #dfe6e9;
@@ -175,10 +176,16 @@
             border-radius: 50%;
             text-decoration: none;
             transition: background 0.3s, color 0.3s;
+            border: none;
         }
-        .pagination a:hover, .pagination a.active {
+        .pagination a:hover, .pagination a.active, .pagination select:hover {
             background: #3498db;
             color: white;
+        }
+        .pagination select {
+            border-radius: 10px;
+            padding: 6px 10px;
+            cursor: pointer;
         }
 
         .content-section {
@@ -215,7 +222,7 @@
             .supplier-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
-            .pagination a {
+            .pagination a, .pagination select {
                 padding: 6px 10px;
             }
         }
@@ -310,9 +317,10 @@
             const merchants = await merchantsResponse.json();
             const itemsPerPage = 60;
             let currentLetter = null;
+            let startIndex = 0; // Track the starting index for the trio
 
             const featuredSuppliers = [
-                "THE ICONIC", "Temu", "AliExpress", "Boost Mobile", "EnergyAustralia", "Bupa", "Lancome", "Napoleon Perdis",
+                "THE ICONIC", "Temu", "AliExpress", "Boost Mobile", "Energy excuseustralia", "Bupa", "Lancome", "Napoleon Perdis",
                 "NET-A-PORTER", "Woolworths Online", "Dyson", "Huddle Insurance", "NIB", "Compare the Market", "Wotif",
                 "Flight Centre", "Fitness First", "Target", "adidas", "Hampers With Bite", "H&M", "Adairs", "OZSALE",
                 "Glue Store", "General Pants Co", "Petstock", "Best&Less", "LEGO", "Mytheresa", "New Balance",
@@ -338,7 +346,7 @@
                         div.textContent = supplier;
                         div.addEventListener('click', () => {
                             document.getElementById('merchantInput').value = supplier;
-                            clearSearchBtn.style.display = 'block'; // Show clear button
+                            clearSearchBtn.style.display = 'block';
                             triggerSearch(supplier);
                             document.getElementById('merchantInput').scrollIntoView({ behavior: 'smooth' });
                         });
@@ -352,7 +360,7 @@
                         div.textContent = merchant;
                         div.addEventListener('click', () => {
                             document.getElementById('merchantInput').value = merchant;
-                            clearSearchBtn.style.display = 'block'; // Show clear button
+                            clearSearchBtn.style.display = 'block';
                             triggerSearch(merchant);
                             document.getElementById('merchantInput').scrollIntoView({ behavior: 'smooth' });
                         });
@@ -363,11 +371,24 @@
                 const pagination = document.getElementById('pagination');
                 pagination.innerHTML = '';
 
-                // Simplified pagination: A, B, C, Prev, Next, Z
-                const currentIndex = letter ? alphabet.indexOf(letter) : -1;
+                // Always show Previous arrow
+                const prev = document.createElement('a');
+                prev.textContent = '←';
+                prev.href = '#';
+                prev.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (!letter) return; // Do nothing if on Featured
+                    startIndex = Math.max(0, startIndex - 3);
+                    currentLetter = alphabet[startIndex];
+                    displaySuppliers(currentLetter);
+                    document.getElementById('merchantInput').scrollIntoView({ behavior: 'smooth' });
+                });
+                pagination.appendChild(prev);
 
-                // A, B, C
-                ['A', 'B', 'C'].forEach(ltr => {
+                // Display current trio of letters
+                const endIndex = Math.min(startIndex + 3, alphabet.length);
+                for (let i = startIndex; i < endIndex; i++) {
+                    const ltr = alphabet[i];
                     const a = document.createElement('a');
                     a.textContent = ltr;
                     a.href = '#';
@@ -379,62 +400,54 @@
                         document.getElementById('merchantInput').scrollIntoView({ behavior: 'smooth' });
                     });
                     pagination.appendChild(a);
-                });
-
-                // Previous
-                if (currentIndex > 0) {
-                    const prev = document.createElement('a');
-                    prev.textContent = '←';
-                    prev.href = '#';
-                    prev.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        currentLetter = alphabet[currentIndex - 1];
-                        displaySuppliers(currentLetter);
-                        document.getElementById('merchantInput').scrollIntoView({ behavior: 'smooth' });
-                    });
-                    pagination.appendChild(prev);
                 }
 
-                // Next
-                if (currentIndex < alphabet.length - 1 && currentIndex !== -1) {
-                    const next = document.createElement('a');
-                    next.textContent = '→';
-                    next.href = '#';
-                    next.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        currentLetter = alphabet[currentIndex + 1];
-                        displaySuppliers(currentLetter);
-                        document.getElementById('merchantInput').scrollIntoView({ behavior: 'smooth' });
-                    });
-                    pagination.appendChild(next);
-                }
-
-                // Z
-                const z = document.createElement('a');
-                z.textContent = 'Z';
-                z.href = '#';
-                if ('Z' === letter) z.classList.add('active');
-                z.addEventListener('click', (e) => {
+                // Always show Next arrow
+                const next = document.createElement('a');
+                next.textContent = '→';
+                next.href = '#';
+                next.addEventListener('click', (e) => {
                     e.preventDefault();
-                    currentLetter = 'Z';
-                    displaySuppliers('Z');
+                    if (!letter) {
+                        startIndex = 0; // Start from A if on Featured
+                        currentLetter = 'A';
+                    } else {
+                        startIndex = Math.min(alphabet.length - 3, startIndex + 3);
+                        currentLetter = alphabet[startIndex];
+                    }
+                    displaySuppliers(currentLetter);
                     document.getElementById('merchantInput').scrollIntoView({ behavior: 'smooth' });
                 });
-                pagination.appendChild(z);
+                pagination.appendChild(next);
 
-                // Back to Featured (if on a letter)
-                if (letter) {
-                    const backLink = document.createElement('a');
-                    backLink.textContent = 'Featured';
-                    backLink.href = '#';
-                    backLink.style.marginLeft = '10px';
-                    backLink.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        currentLetter = null;
-                        displaySuppliers();
-                    });
-                    pagination.appendChild(backLink);
-                }
+                // Jump to Letter dropdown
+                const jumpSelect = document.createElement('select');
+                jumpSelect.innerHTML = '<option value="">Jump to...</option>' + 
+                    alphabet.map(ltr => `<option value="${ltr}">${ltr}</option>`).join('');
+                jumpSelect.addEventListener('change', (e) => {
+                    const selectedLetter = e.target.value;
+                    if (selectedLetter) {
+                        currentLetter = selectedLetter;
+                        startIndex = Math.max(0, alphabet.indexOf(selectedLetter) - 1); // Center the selected letter
+                        displaySuppliers(selectedLetter);
+                        document.getElementById('merchantInput').scrollIntoView({ behavior: 'smooth' });
+                    }
+                    e.target.value = ''; // Reset dropdown
+                });
+                pagination.appendChild(jumpSelect);
+
+                // Featured link
+                const featured = document.createElement('a');
+                featured.textContent = 'Featured';
+                featured.href = '#';
+                if (!letter) featured.classList.add('active');
+                featured.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    currentLetter = null;
+                    startIndex = 0; // Reset to A, B, C
+                    displaySuppliers();
+                });
+                pagination.appendChild(featured);
             }
 
             async function triggerSearch(merchant) {
