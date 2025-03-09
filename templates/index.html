@@ -3,7 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cashback Search</title>
+    <!-- SEO Meta Tags -->
+    <title>Cashback Search - Find the Best Cashback Offers in Australia</title>
+    <meta name="description" content="Compare cashback offers from ShopBack, TopCashback, and Cashrewards in Australia. Search merchants, browse categories, and save on shopping!">
+    <meta name="keywords" content="cashback, Australia, ShopBack, TopCashback, Cashrewards, shopping deals, save money, merchant offers">
+    <meta name="author" content="Cashback Search">
+    <meta name="robots" content="index, follow">
+    <!-- Open Graph (Facebook, LinkedIn, etc.) -->
+    <meta property="og:title" content="Cashback Search - Best Cashback Offers in Australia">
+    <meta property="og:description" content="Discover and compare cashback deals from top Australian platforms. Shop smarter and save more!">
+    <meta property="og:image" content="{{ url_for('static', filename='logo.png', _external=True) }}">
+    <meta property="og:url" content="https://cashback-search.vercel.app/">
+    <meta property="og:type" content="website">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Cashback Search - Best Cashback Offers in Australia">
+    <meta name="twitter:description" content="Discover and compare cashback deals from top Australian platforms. Shop smarter and save more!">
+    <meta name="twitter:image" content="{{ url_for('static', filename='logo.png', _external=True) }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
         body {
@@ -128,36 +144,37 @@
             background: #e74c3c;
             color: white;
         }
-
-        .supplier-section {
+        .categories-section, .supplier-section {
             background: #fef9e7;
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             margin-bottom: 30px;
         }
-        .supplier-section h2 {
+        .categories-section h2, .supplier-section h2 {
             color: #f39c12;
             font-size: 1.75rem;
             margin-bottom: 20px;
         }
-        .supplier-grid {
+        .category-grid, .supplier-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
         }
-        .supplier-grid div {
+        .category-grid a, .supplier-grid div {
             padding: 10px;
             background: #fff;
             border-radius: 10px;
             text-align: center;
+            text-decoration: none;
+            color: #2c3e50;
             cursor: pointer;
             transition: background 0.2s, transform 0.2s;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
-        .supplier-grid div:hover {
+        .category-grid a:hover, .supplier-grid div:hover {
             background: #ecf0f1;
             transform: translateY(-2px);
         }
@@ -187,7 +204,6 @@
             padding: 6px 10px;
             cursor: pointer;
         }
-
         .content-section {
             background: #ffffff;
             padding: 20px;
@@ -211,15 +227,13 @@
             color: #3498db;
             font-weight: 600;
         }
-
         @media (max-width: 768px) {
-            .supplier-grid {
+            .category-grid, .supplier-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
-
         @media (max-width: 480px) {
-            .supplier-grid {
+            .category-grid, .supplier-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
             .pagination a, .pagination select {
@@ -232,7 +246,9 @@
 <body>
     <div class="container">
         <div class="logo-container">
-            <img src="{{ url_for('static', filename='logo.png') }}" alt="Cashback Search Logo">
+            <a href="/">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Cashback Search Logo">
+            </a>
         </div>
         <div class="search-container">
             <div class="input-wrapper">
@@ -252,6 +268,31 @@
             <tbody id="resultsBody"></tbody>
         </table>
 
+        <!-- Categories Section -->
+        <section class="categories-section">
+            <h2>Categories</h2>
+            <div class="category-grid">
+                <a href="/food-groceries">Food & Groceries</a>
+                <a href="/travel">Travel</a>
+                <a href="/fashion">Fashion</a>
+                <a href="/technology">Technology</a>
+                <a href="/marketplaces">Marketplaces</a>
+                <a href="/home">Home</a>
+                <a href="/kids">Kids</a>
+                <a href="/pets">Pets</a>
+                <a href="/alcohol">Alcohol</a>
+                <a href="/sports-outdoors">Sports & Outdoors</a>
+                <a href="/health-wellness">Health & Wellness</a>
+                <a href="/cosmetics">Cosmetics</a>
+                <a href="/luxury-brands">Luxury Brands</a>
+                <a href="/services">Services</a>
+                <a href="/experiences">Experiences</a>
+                <a href="/finance">Finance</a>
+                <a href="/books">Books</a>
+            </div>
+        </section>
+
+        <!-- Featured Suppliers -->
         <section class="supplier-section" id="supplierSection">
             <h2 id="supplierTitle">Featured Suppliers</h2>
             <div class="supplier-grid" id="supplierGrid"></div>
@@ -317,10 +358,10 @@
             const merchants = await merchantsResponse.json();
             const itemsPerPage = 60;
             let currentLetter = null;
-            let startIndex = 0; // Track the starting index for the trio
+            let startIndex = 0;
 
             const featuredSuppliers = [
-                "THE ICONIC", "Temu", "AliExpress", "Boost Mobile", "Energy excuseustralia", "Bupa", "Lancome", "Napoleon Perdis",
+                "THE ICONIC", "Temu", "AliExpress", "Boost Mobile", "EnergyAustralia", "Bupa", "Lancome", "Napoleon Perdis",
                 "NET-A-PORTER", "Woolworths Online", "Dyson", "Huddle Insurance", "NIB", "Compare the Market", "Wotif",
                 "Flight Centre", "Fitness First", "Target", "adidas", "Hampers With Bite", "H&M", "Adairs", "OZSALE",
                 "Glue Store", "General Pants Co", "Petstock", "Best&Less", "LEGO", "Mytheresa", "New Balance",
@@ -371,13 +412,12 @@
                 const pagination = document.getElementById('pagination');
                 pagination.innerHTML = '';
 
-                // Always show Previous arrow
                 const prev = document.createElement('a');
                 prev.textContent = '←';
                 prev.href = '#';
                 prev.addEventListener('click', (e) => {
                     e.preventDefault();
-                    if (!letter) return; // Do nothing if on Featured
+                    if (!letter) return;
                     startIndex = Math.max(0, startIndex - 3);
                     currentLetter = alphabet[startIndex];
                     displaySuppliers(currentLetter);
@@ -385,7 +425,6 @@
                 });
                 pagination.appendChild(prev);
 
-                // Display current trio of letters
                 const endIndex = Math.min(startIndex + 3, alphabet.length);
                 for (let i = startIndex; i < endIndex; i++) {
                     const ltr = alphabet[i];
@@ -402,14 +441,13 @@
                     pagination.appendChild(a);
                 }
 
-                // Always show Next arrow
                 const next = document.createElement('a');
                 next.textContent = '→';
                 next.href = '#';
                 next.addEventListener('click', (e) => {
                     e.preventDefault();
                     if (!letter) {
-                        startIndex = 0; // Start from A if on Featured
+                        startIndex = 0;
                         currentLetter = 'A';
                     } else {
                         startIndex = Math.min(alphabet.length - 3, startIndex + 3);
@@ -420,7 +458,6 @@
                 });
                 pagination.appendChild(next);
 
-                // Jump to Letter dropdown
                 const jumpSelect = document.createElement('select');
                 jumpSelect.innerHTML = '<option value="">Jump to...</option>' + 
                     alphabet.map(ltr => `<option value="${ltr}">${ltr}</option>`).join('');
@@ -428,15 +465,14 @@
                     const selectedLetter = e.target.value;
                     if (selectedLetter) {
                         currentLetter = selectedLetter;
-                        startIndex = Math.max(0, alphabet.indexOf(selectedLetter) - 1); // Center the selected letter
+                        startIndex = Math.max(0, alphabet.indexOf(selectedLetter) - 1);
                         displaySuppliers(selectedLetter);
                         document.getElementById('merchantInput').scrollIntoView({ behavior: 'smooth' });
                     }
-                    e.target.value = ''; // Reset dropdown
+                    e.target.value = '';
                 });
                 pagination.appendChild(jumpSelect);
 
-                // Featured link
                 const featured = document.createElement('a');
                 featured.textContent = 'Featured';
                 featured.href = '#';
@@ -444,7 +480,7 @@
                 featured.addEventListener('click', (e) => {
                     e.preventDefault();
                     currentLetter = null;
-                    startIndex = 0; // Reset to A, B, C
+                    startIndex = 0;
                     displaySuppliers();
                 });
                 pagination.appendChild(featured);
