@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO Meta Tags -->
+    <title>Sports & Outdoors Cashback Offers - Cashback Search</title>
+    <meta name="description" content="Explore cashback offers for sports and outdoor gear from ShopBack, TopCashback, and Cashrewards in Australia. Save on fitness, camping, and more!">
+    <meta name="keywords" content="cashback, sports, outdoors, Australia, fitness, camping, ShopBack, TopCashback, Cashrewards">
+    <meta name="author" content="Cashback Search">
+    <meta name="robots" content="index, follow">
+    <!-- Open Graph -->
+    <meta property="og:title" content="Sports & Outdoors Cashback Offers - Cashback Search">
+    <meta property="og:description" content="Find cashback deals for sports and outdoor gear from top Australian platforms. Gear up and save!">
+    <meta property="og:image" content="https://cashback-search.vercel.app/static/logo.png">
+    <meta property="og:url" content="https://cashback-search.vercel.app/sports-outdoors">
+    <meta property="og:type" content="website">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sports & Outdoors Cashback Offers - Cashback Search">
+    <meta name="twitter:description" content="Find cashback deals for sports and outdoor gear from top Australian platforms. Gear up and save!">
+    <meta name="twitter:image" content="https://cashback-search.vercel.app/static/logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background: #f0f4f8; color: #2c3e50; min-height: 100vh; overflow-x: hidden; }
+        .container { padding: 0 15px; }
+        .logo-container { background: #ffffff; padding: 20px; text-align: center; border-radius: 15px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); margin-bottom: 30px; }
+        .logo-container img { max-width: 100%; height: auto; width: clamp(150px, 40vw, 300px); }
+        .search-container { background: #e3f2fd; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); margin-bottom: 30px; position: relative; }
+        .input-wrapper { position: relative; display: flex; align-items: center; }
+        #merchantInput { font-size: 1.1rem; border-radius: 25px; padding: 12px 40px 12px 20px; border: 2px solid #3498db; box-shadow: none; transition: border-color 0.3s, box-shadow 0.3s; width: 100%; }
+        #merchantInput:focus { border-color: #2980b9; box-shadow: 0 0 10px rgba(41, 128, 185, 0.3); }
+        #clearSearch { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: #e74c3c; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; font-size: 14px; line-height: 24px; text-align: center; cursor: pointer; display: none; transition: background 0.3s; }
+        #clearSearch:hover { background: #c0392b; }
+        #suggestions { position: absolute; top: calc(100% - 10px); left: 20px; right: 20px; background: #fff; border: 1px solid #dfe6e9; border-radius: 10px; max-height: 250px; overflow-y: auto; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); z-index: 1000; }
+        #suggestions div { padding: 10px 15px; cursor: pointer; transition: background 0.2s; }
+        #suggestions div:hover { background: #ecf0f1; }
+        #resultsTable { background: #fff; border-radius: 15px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); margin-bottom: 30px; }
+        #resultsTable th { background: #3498db; color: white; text-transform: uppercase; }
+        #resultsTable td { border-bottom: 1px solid #dfe6e9; }
+        #resultsTable tr:last-child td { border-bottom: none; }
+        #resultsTable tr:nth-child(even) { background: #f9fafb; }
+        #resultsTable a { color: #e74c3c; font-weight: 500; padding: 5px 10px; border-radius: 12px; transition: background 0.3s, color 0.3s; }
+        #resultsTable a:hover { background: #e74c3c; color: white; }
+        .category-suppliers-section { background: #fef9e7; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); margin-bottom: 30px; }
+        .category-suppliers-section h2 { color: #f39c12; font-size: 1.75rem; margin-bottom: 20px; }
+        .supplier-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        .supplier-grid div { padding: 10px; background: #fff; border-radius: 10px; text-align: center; cursor: pointer; transition: background 0.2s, transform 0.2s; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .supplier-grid div:hover { background: #ecf0f1; transform: translateY(-2px); }
+        .content-section { background: #ffffff; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); margin-bottom: 30px; }
+        .content-section:nth-child(odd) { background: #f4ecf7; }
+        .content-section h2 { color: #8e44ad; font-size: 1.75rem; margin-bottom: 20px; }
+        .content-section p, .content-section li { font-size: 1rem; line-height: 1.6; }
+        .content-section summary { color: #3498db; font-weight: 600; }
+        @media (max-width: 768px) { .supplier-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 480px) { .supplier-grid { grid-template-columns: repeat(2, 1fr); } }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="logo-container">
+            <a href="/">
+                <img src="/static/logo.png" alt="Cashback Search Logo">
+            </a>
+        </div>
+        <div class="search-container">
+            <div class="input-wrapper">
+                <input type="text" id="merchantInput" class="form-control" placeholder="Search for a merchant...">
+                <button id="clearSearch" title="Clear search">×</button>
+            </div>
+            <div id="suggestions"></div>
+        </div>
+        <table id="resultsTable" class="table table-hover" style="display: none;">
+            <thead>
+                <tr>
+                    <th>Site</th>
+                    <th>Cashback</th>
+                    <th>URL</th>
+                </tr>
+            </thead>
+            <tbody id="resultsBody"></tbody>
+        </table>
+        <section class="category-suppliers-section">
+            <h2>Sports & Outdoors</h2>
+            <div class="supplier-grid" id="supplierGrid">
+                <div>Rebel Sport</div>
+                <div>Anaconda</div>
+                <div>Decathlon</div>
+                <div>Sports Power</div>
+                <div>Kathmandu</div>
+                <div>The Iconic Sport</div>
+            </div>
+        </section>
+        <section class="content-section">
+            <h2>About This Tool</h2>
+            <p>Cashback Search is a free, easy-to-use tool designed to help you find the best cashback offers from three leading Australian cashback platforms: ShopBack, TopCashback, and Cashrewards. Whether you're shopping for clothes, travel, or tech, simply enter a merchant name to see available cashback rates and links to check them out—all in one place!</p>
+        </section>
+        <section class="content-section">
+            <h2>How to Use</h2>
+            <ol>
+                <li>Type the name of a merchant (e.g., "Adore Beauty" or "Amazon") into the search bar above.</li>
+                <li>Select the merchant from the dropdown suggestions or click one from the list below.</li>
+                <li>View the cashback offers in the table—each row shows the site, cashback rate, and a link to visit.</li>
+                <li>Click "Go" to proceed with a cashback offer, or "Check" if no cashback is listed to verify manually.</li>
+            </ol>
+        </section>
+        <section class="content-section">
+            <h2>Disclaimer</h2>
+            <p>This tool provides cashback information based on web scraping and is for informational purposes only. While we strive for accuracy, offers may change, and errors can occur. <strong>Always verify the cashback offer directly on the cashback site before making a purchase</strong>, especially if the merchant name seems incorrect or no cashback is shown. We are not responsible for inaccuracies, outdated information, or any financial loss resulting from reliance on this tool.</p>
+        </section>
+        <section class="content-section">
+            <h2>Frequently Asked Questions (FAQ)</h2>
+            <details>
+                <summary>What is cashback?</summary>
+                <p>Cashback is a reward offered by certain websites where you get a percentage of your purchase amount back after shopping through their links.</p>
+            </details>
+            <details>
+                <summary>Why does it say "No Cashback Available"?</summary>
+                <p>This means our tool couldn’t find a cashback offer for that merchant on the site at the time of the search. Click "Check" to visit the site and confirm manually.</p>
+            </details>
+            <details>
+                <summary>Are all merchants covered?</summary>
+                <p>We search a curated list of merchants from our database. If a merchant isn’t listed, try a similar name or check the cashback sites directly.</p>
+            </details>
+            <details>
+                <summary>Is this tool affiliated with the cashback sites?</summary>
+                <p>No, we’re an independent tool designed to help users compare offers. We don’t earn commissions or have partnerships with these sites.</p>
+            </details>
+        </section>
+        <section class="content-section">
+            <h2>About the Cashback Sites</h2>
+            <h3>ShopBack</h3>
+            <p>Founded in 2014 in Singapore, ShopBack has grown into one of Asia-Pacific’s leading cashback platforms, expanding to Australia and beyond. It partners with thousands of retailers, offering cashback on everything from fashion to travel, with a mission to make shopping more rewarding.</p>
+            <h3>TopCashback</h3>
+            <p>Launched in 2005 in the UK, TopCashback is one of the world’s largest cashback sites, entering the Australian market later. Known for passing 100% of commissions to users, it’s a favorite for maximizing savings across a wide range of stores.</p>
+            <h3>Cashrewards</h3>
+            <p>Started in 2014 in Australia, Cashrewards is a homegrown cashback platform that’s become a go-to for Aussie shoppers. With partnerships across major retailers, it’s known for competitive rates and a user-friendly experience.</p>
+        </section>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="/static/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const merchantsResponse = await fetch('/merchants');
+            const merchants = await merchantsResponse.json();
+            const supplierGrid = document.getElementById('supplierGrid');
+            supplierGrid.addEventListener('click', (e) => {
+                const merchant = e.target.textContent;
+                document.getElementById('merchantInput').value = merchant;
+                document.getElementById('clearSearch').style.display = 'block';
+                triggerSearch(merchant);
+                document.getElementById('merchantInput').scrollIntoView({ behavior: 'smooth' });
+            });
+            async function triggerSearch(merchant) {
+                const resultsTable = document.getElementById('resultsTable');
+                const resultsBody = document.getElementById('resultsBody');
+                resultsBody.innerHTML = '<tr><td colspan="3">Loading...</td></tr>';
+                resultsTable.style.display = 'table';
+                const formData = new FormData();
+                formData.append('merchant', merchant);
+                try {
+                    const response = await fetch('/search', { method: 'POST', body: formData });
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    const results = await response.json();
+                    if (results.error) {
+                        resultsBody.innerHTML = `<tr><td colspan="3">${results.error}</td></tr>`;
+                        return;
+                    }
+                    resultsBody.innerHTML = '';
+                    results.forEach(result => {
+                        const row = document.createElement('tr');
+                        const buttonText = result.Cashback === "No Cashback Available" ? "Check" : "Go";
+                        row.innerHTML = `<td>${result.Site}</td><td>${result.Cashback}</td><td><a href="${result.URL}" target="_blank">${buttonText}</a></td>`;
+                        resultsBody.appendChild(row);
+                    });
+                } catch (error) {
+                    resultsBody.innerHTML = `<tr><td colspan="3">Error: ${error.message}</td></tr>`;
+                }
+            }
+            const merchantInput = document.getElementById('merchantInput');
+            const suggestionsDiv = document.getElementById('suggestions');
+            const clearSearchBtn = document.getElementById('clearSearch');
+            merchantInput.addEventListener('input', async () => {
+                const query = merchantInput.value.trim();
+                suggestionsDiv.innerHTML = '';
+                clearSearchBtn.style.display = query.length > 0 ? 'block' : 'none';
+                if (query.length < 2) return;
+                try {
+                    const response = await fetch(`/suggest?q=${encodeURIComponent(query)}`);
+                    if (!response.ok) throw new Error('Suggestion fetch failed');
+                    const suggestions = await response.json();
+                    suggestionsDiv.innerHTML = suggestions.map(s => `<div>${s}</div>`).join('');
+                } catch (error) {
+                    suggestionsDiv.innerHTML = `<div>Error loading suggestions</div>`;
+                }
+            });
+            suggestionsDiv.addEventListener('click', (e) => {
+                const merchant = e.target.textContent;
+                merchantInput.value = merchant;
+                suggestionsDiv.innerHTML = '';
+                clearSearchBtn.style.display = 'block';
+                triggerSearch(merchant);
+            });
+            clearSearchBtn.addEventListener('click', () => {
+                merchantInput.value = '';
+                suggestionsDiv.innerHTML = '';
+                clearSearchBtn.style.display = 'none';
+                document.getElementById('resultsTable').style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
