@@ -4,9 +4,89 @@
     {
       "src": "app.py",
       "use": "@vercel/python"
+    },
+    {
+      "src": "templates/*.html",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
+    {
+      "src": "/",
+      "dest": "/templates/index.html"
+    },
+    {
+      "src": "/food-groceries",
+      "dest": "/templates/food-groceries.html"
+    },
+    {
+      "src": "/travel",
+      "dest": "/templates/travel.html"
+    },
+    {
+      "src": "/fashion",
+      "dest": "/templates/fashion.html"
+    },
+    {
+      "src": "/technology",
+      "dest": "/templates/technology.html"
+    },
+    {
+      "src": "/marketplaces",
+      "dest": "/templates/marketplaces.html"
+    },
+    {
+      "src": "/home",
+      "dest": "/templates/home.html"
+    },
+    {
+      "src": "/kids",
+      "dest": "/templates/kids.html"
+    },
+    {
+      "src": "/pets",
+      "dest": "/templates/pets.html"
+    },
+    {
+      "src": "/alcohol",
+      "dest": "/templates/alcohol.html"
+    },
+    {
+      "src": "/sports-outdoors",
+      "dest": "/templates/sports-outdoors.html"
+    },
+    {
+      "src": "/health-wellness",
+      "dest": "/templates/health-wellness.html"
+    },
+    {
+      "src": "/cosmetics",
+      "dest": "/templates/cosmetics.html"
+    },
+    {
+      "src": "/luxury-brands",
+      "dest": "/templates/luxury-brands.html"
+    },
+    {
+      "src": "/services",
+      "dest": "/templates/services.html"
+    },
+    {
+      "src": "/experiences",
+      "dest": "/templates/experiences.html"
+    },
+    {
+      "src": "/finance",
+      "dest": "/templates/finance.html"
+    },
+    {
+      "src": "/books",
+      "dest": "/templates/books.html"
+    },
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
     {
       "src": "/(.*)",
       "dest": "app.py"
