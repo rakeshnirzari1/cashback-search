@@ -46,7 +46,7 @@
             width: clamp(150px, 40vw, 300px);
         }
         .search-container {
-            background: #e3f2fd;
+            background: #e9ecef;
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -144,37 +144,65 @@
             background: #e74c3c;
             color: white;
         }
-        .category-suppliers-section {
-            background: #fef9e7;
+        .categories-section, .supplier-section {
+            background: #e9ecef;
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             margin-bottom: 30px;
         }
-        .category-suppliers-section h2 {
-            color: #f39c12;
+        .categories-section h2, .supplier-section h2 {
+            #color: #f39c12;
             font-size: 1.75rem;
             margin-bottom: 20px;
         }
-        .supplier-grid {
+        .category-grid, .supplier-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
         }
-        .supplier-grid div {
+        .category-grid a, .supplier-grid div {
             padding: 10px;
             background: #fff;
             border-radius: 10px;
             text-align: center;
+            text-decoration: none;
+            color: #2c3e50;
             cursor: pointer;
             transition: background 0.2s, transform 0.2s;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
-        .supplier-grid div:hover {
+        .category-grid a:hover, .supplier-grid div:hover {
             background: #ecf0f1;
             transform: translateY(-2px);
+        }
+        .pagination {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 5px;
+            align-items: center;
+        }
+        .pagination a, .pagination select {
+            margin: 0;
+            padding: 8px 12px;
+            background: #dfe6e9;
+            color: #333;
+            border-radius: 50%;
+            text-decoration: none;
+            transition: background 0.3s, color 0.3s;
+            border: none;
+        }
+        .pagination a:hover, .pagination a.active, .pagination select:hover {
+            background: #3498db;
+            color: white;
+        }
+        .pagination select {
+            border-radius: 10px;
+            padding: 6px 10px;
+            cursor: pointer;
         }
         .content-section {
             background: #ffffff;
@@ -184,10 +212,10 @@
             margin-bottom: 30px;
         }
         .content-section:nth-child(odd) {
-            background: #f4ecf7;
+            background: #e9ecef;
         }
         .content-section h2 {
-            color: #8e44ad;
+            #color: #8e44ad;
             font-size: 1.75rem;
             margin-bottom: 20px;
         }
@@ -200,13 +228,16 @@
             font-weight: 600;
         }
         @media (max-width: 768px) {
-            .supplier-grid {
+            .category-grid, .supplier-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
         @media (max-width: 480px) {
-            .supplier-grid {
+            .category-grid, .supplier-grid {
                 grid-template-columns: repeat(2, 1fr);
+            }
+            .pagination a, .pagination select {
+                padding: 6px 10px;
             }
         }
     </style>
