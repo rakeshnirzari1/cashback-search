@@ -14,7 +14,7 @@
             overflow-x: hidden;
         }
         .container {
-            padding: 0 15px; /* Ensure padding for small screens */
+            padding: 0 15px;
         }
         .logo-container {
             background: #ffffff;
@@ -35,23 +35,50 @@
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             margin-bottom: 30px;
-            position: relative; /* Ensure suggestions position correctly */
+            position: relative;
+        }
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
         }
         #merchantInput {
             font-size: 1.1rem;
             border-radius: 25px;
-            padding: 12px 20px;
+            padding: 12px 40px 12px 20px; /* Extra padding-right for clear button */
             border: 2px solid #3498db;
             box-shadow: none;
             transition: border-color 0.3s, box-shadow 0.3s;
+            width: 100%;
         }
         #merchantInput:focus {
             border-color: #2980b9;
             box-shadow: 0 0 10px rgba(41, 128, 185, 0.3);
         }
+        #clearSearch {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 14px;
+            line-height: 24px;
+            text-align: center;
+            cursor: pointer;
+            display: none; /* Hidden by default */
+            transition: background 0.3s;
+        }
+        #clearSearch:hover {
+            background: #c0392b;
+        }
         #suggestions {
             position: absolute;
-            top: calc(100% - 10px); /* Adjust for padding */
+            top: calc(100% - 10px);
             left: 20px;
             right: 20px;
             background: #fff;
@@ -60,7 +87,7 @@
             max-height: 250px;
             overflow-y: auto;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            z-index: 1000; /* Ensure it’s above other elements */
+            z-index: 1000;
         }
         #suggestions div {
             padding: 10px 15px;
@@ -126,9 +153,9 @@
             text-align: center;
             cursor: pointer;
             transition: background 0.2s, transform 0.2s;
-            overflow: hidden; /* Prevent overflow */
-            text-overflow: ellipsis; /* Handle long text */
-            white-space: nowrap; /* Keep text in one line */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
         .supplier-grid div:hover {
             background: #ecf0f1;
@@ -195,7 +222,10 @@
             <img src="{{ url_for('static', filename='logo.png') }}" alt="Cashback Search Logo">
         </div>
         <div class="search-container">
-            <input type="text" id="merchantInput" class="form-control" placeholder="Search for a merchant...">
+            <div class="input-wrapper">
+                <input type="text" id="merchantInput" class="form-control" placeholder="Search for a merchant...">
+                <button id="clearSearch" title="Clear search">×</button>
+            </div>
             <div id="suggestions"></div>
         </div>
         <table id="resultsTable" class="table table-hover" style="display: none;">
@@ -390,10 +420,13 @@
 
             const merchantInput = document.getElementById('merchantInput');
             const suggestionsDiv = document.getElementById('suggestions');
+            const clearSearchBtn = document.getElementById('clearSearch');
 
             merchantInput.addEventListener('input', async () => {
                 const query = merchantInput.value.trim();
-                suggestionsDiv.innerHTML = ''; // Clear suggestions immediately
+                suggestionsDiv.innerHTML = '';
+                clearSearchBtn.style.display = query.length > 0 ? 'block' : 'none'; // Show/hide X button
+
                 if (query.length < 2) return;
 
                 try {
@@ -410,7 +443,15 @@
                 const merchant = e.target.textContent;
                 merchantInput.value = merchant;
                 suggestionsDiv.innerHTML = '';
+                clearSearchBtn.style.display = 'block'; // Keep X visible after selection
                 triggerSearch(merchant);
+            });
+
+            clearSearchBtn.addEventListener('click', () => {
+                merchantInput.value = '';
+                suggestionsDiv.innerHTML = '';
+                clearSearchBtn.style.display = 'none';
+                document.getElementById('resultsTable').style.display = 'none'; // Optional: hide results
             });
         });
     </script>
